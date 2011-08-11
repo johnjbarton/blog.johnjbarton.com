@@ -29,7 +29,7 @@ written in some funky old language.
 node.js does have a blog system,
 [wheat](https://github.com/creationix/wheat). As soon as I read that
 it used [markdown](http://wiki.eclipse.org/Orion/Server_API/Git_API) I
-was in. But its way cooler than that. `Wheat` support inline code demos 
+was in. But its way cooler than that. `Wheat` supports inline code demos 
 and the CMS is Git. Presto, solutions for editing, code demos, and backup.
 
 The final bit was hosting. Lots of good choices, but I was unsure how
