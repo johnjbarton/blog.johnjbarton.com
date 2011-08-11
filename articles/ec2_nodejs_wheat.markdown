@@ -29,7 +29,7 @@ written in some funky old language.
 node.js does have a blog system,
 [wheat](https://github.com/creationix/wheat). As soon as I read that
 it used [markdown](http://wiki.eclipse.org/Orion/Server_API/Git_API) I
-was in. But its way cooler than that. Wheat support inline code demos 
+was in. But its way cooler than that. `Wheat` support inline code demos 
 and the CMS is Git. Presto, solutions for editing, code demos, and backup.
 
 The final bit was hosting. Lots of good choices, but I was unsure how
@@ -49,72 +49,74 @@ use his install scripts in the end, I want just node.js not nginx
 proxy to node.js.
 
 Second, you can't see your ec2 machine. You need to run it through
-ssh. No problem once you sort out the keys part. Well except any
-problems in files require editing with vi. 
+`ssh`. No problem once you sort out the keys part. Well except any
+problems in files require editing with `vi`. 
 
 Third, the ec2 machine has a url like
 ec2-107-20-57-90.compute-1.amazonaws.com. Even my geeky friends won't
 type that one. Fortunately I already use
-[dyndns](http://dyn.com/). Just had to ponder CNAME for a bit to map
-blog.johnjbarton.com to that other URL.
+[dyndns](http://dyn.com/). Just had to ponder `CNAME` for a bit to map
+`blog.johnjbarton.com` to that other URL.
 
 As soon as I had node installed I started with the [sudo npm
 install](http://npmjs.org/) commands. Wow, very slick! Well it seemed
-that way at first. To try out wheat I cloned
+that way at first. To try out `wheat`, I cloned
 [howtonode](https://github.com/creationix/howtonode.org), the site
-that demo's wheat. Fired up node in the howtonode directory using 
-  node server/server.js
+that demo's `wheat`. Fired up `node` in my `/howtonode` directory using 
+ * `node server/server.js`
 (I guess I must have edited the port number to 8080). Fail. 
 
-Turns out npm does not account for versions in its dependency
-tracking. So wheat croaked on the 0.5.3pre version of node I
-installed. Uninstall. Reinstall node 0.4. Works. (But along they way
+Turns out `npm` does not account for versions in its dependency
+tracking. So `wheat` croaked on the 0.5.3pre version of `node` I
+installed. Uninstall. Reinstall `node` 0.4. Works. (But along the way
 you have to remember to put the sudo in front all of the time.)
 
-Works, but I don't want to host a copy of howtonode, I want my own
-blog. And there are no docs on wheat configuration. So I copied the
-howtonode files, deleted a bunch, and edited the rest. Launched wheat
+Works, but I don't want to host a copy of `howtonode`, I want my own
+blog. And there are no docs on `wheat` configuration. So I copied the
+`howtonode` files, deleted a bunch, and edited the rest. Launched `wheat`
 in my directory. Fail.
 
 Common sense would tell you to review which files you deleted and
 edited. So of course I didn't do that.  I did what any developer would
-do: start adding console.log statements until you see something come
+do: start adding `console.log` statements until you see something come
 out. 
 
-At first I added console.log statements but I got nothing
+At first I added `console.log` statements but I got nothing
 out. Eventually I learned about
 [node_module](http://nodejs.org/api/modules.html#loading_from_node_modules_Folders):
-I had at least three copies of wheat and I wasn't editing the right
+I had at least three copies of `wheat` and I wasn't editing the right
 one.
 
 Once I found the right files, more learning was in store. I learned
-about 'routes' in node, which are regular expression filters on the
-URL that fire JS handlers for content. I learned that wheat has
-another template expansion system called HAML and it is driven by some
+about 'routes' in `node`, which are regular expression filters on the
+URL that fire JS handlers for content. I learned that `wheat` has
+another template expansion system called `HAML` and it is driven by some
 puzzling callbacks-are-confusing-fixer code. And I learned that I
 deleted too many files and did not edit enough of them.
 
 Finally I had my first Hello World blog page! But every time my home
-computer goes to sleep it disconnects ssh and the site goes down. I
+computer goes to sleep it disconnects `ssh` and the site goes down. I
 need some sort of background task solution. Of course node has a
 solution, [Forever](https://github.com/indexzero/forever). One more
-npm install later I typed 
-  forever start server/server.js 
+`npm install` later I typed 
+  * `forever start server/server.js` 
 in my blog directory. I had a blog. 
 
 Well I had a blog on port 8080. Woohoo, let's fire this
-baby up on port 80! One vi edit on server.js and another forever command...
+baby up on port 80! One `vi` edit on `server.js` and another `forever` command...
 
-Gee, the site does not respond and the ssh command line is
-laggy. 'top' says my CPU is pegged. Hmm. ec2 gives me 750 hours of CPU
-time. 750/24 = 30. Ok so I don't have to panic, but this it not
+Gee, the site does not respond and the `ssh` command line is
+laggy. `top` says my CPU is pegged. Hmm. ec2 gives me 750 hours of CPU
+time. 750hr/24hr/day = 30day. Ok so I don't have to panic, but this it not
 good. It worked so well on port 8080...oh. I was in an infinite loop
-of permission errors followed by forever recovery.
+of permission errors followed by `forever` recovery.
 
-Final commands:
- forever stop server/server.js
- sudo forever start server/server.js
-and I'm here.
+Final commands: 
+  *  `forever stop server/server.js` 
+  *  `sudo forever start
+ server/server.js` and I'm up. Now I just `git push` from my home
+machine and `git pull` on the ssh terminal to publish. Only thing
+better would be a `git` api on the server so I can edit directly...
 
 jjb
 
